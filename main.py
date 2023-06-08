@@ -1,12 +1,12 @@
 from mta import MTARGBMatrix
-from rgb import RGBMatrix
+from rgb import MatrixClass
 import sys
 import time
 
 def main():
     print("hello world")
     mta = MTARGBMatrix(STATION)
-    rgb = RGBMatrix()
+    rgb = MatrixClass()
 
     try:
      while True:
