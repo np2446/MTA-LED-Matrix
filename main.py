@@ -1,10 +1,11 @@
 from mta import MTARGBMatrix
 from rgb import RGBMatrix
+import sys
 import time
 
 def main():
     print("hello world")
-    mta = MTARGBMatrix("R18")
+    mta = MTARGBMatrix(STATION)
     rgb = RGBMatrix()
 
     try:
@@ -20,8 +21,9 @@ def main():
     except KeyboardInterrupt:
         print("User interrupted program. Exiting...")
 
-
-
-
-if __name__ == "__main__":
-    main()
+if len(sys.argv) == 2 and __name__ == "__main__":
+   STATION = sys.argv[1]
+   print(f"Starting Program with Stop {STATION}\n")
+   main()
+else:
+   print("ERROR: Program expects station as command line argument. Usage: main.py Station_ID")
