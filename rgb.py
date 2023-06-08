@@ -1,7 +1,7 @@
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from PIL import ImageFont, ImageDraw, Image
 
-class RGBMatrix():
+class MatrixClass():
 
     def __init__(self):
         # initialize matrix options and matrix object
