@@ -1,6 +1,5 @@
 from nyct_gtfs import NYCTFeed
-from datetime import datetime, timedelta
-import subprocess
+from datetime import datetime
 import os
 
 API_KEY = os.environ.get('MTAKey')
