@@ -55,13 +55,13 @@ class MTARGBMatrix():
         # Sort the uptown and downtown trains by arrival time
         self.uptown_trains.sort()
         self.downtown_trains.sort()
-
+        
+        # Add info to strings
         self.uptownString = "Uptown: "
         self.downtownString = "Downtown: "
         
         for _, train_info in self.uptown_trains[:4]:
             self.uptownString += train_info + " "
-
        
         for _, train_info in self.downtown_trains[:4]:
             self.downtownString += train_info + " "
