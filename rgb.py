@@ -21,8 +21,17 @@ class MatrixClass():
 
     def displayText(self, text):
         self.matrix.Clear()
-        self.draw.text((0,8), text, font = self.font, fill = (255,255,0))
-        self.matrix.SetImage(self.canvas.convert('RGB'))
+        text_width, text_height = self.draw.textsize(text, font=self.font)
+        x = self.options.cols
+        y = 8
+
+        while x > -text_width:
+            self.canvas = Image.new("RGB", (self.options.cols, self.options.rows))
+            self.draw = ImageDraw.Draw(self.canvas)
+            self.draw.text((x, y), text, font=self.font, fill=(255, 255, 0))
+            self.matrix.SetImage(self.canvas.convert('RGB'))
+            self.matrix.SwapOnVSync()
+            x -= 1  # Adjust the scrolling speed here
 
     
 
