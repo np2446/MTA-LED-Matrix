@@ -14,7 +14,7 @@ class MatrixClass():
         self.matrix = RGBMatrix(options = self.options)
 
         # initialize fonts and canvas
-        fontPath = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf" # replace with font path
+        fontPath = "/home/noah/MTAGRBMatrix/eight-bit-dragon.otf" # replace with font path
         self.font = ImageFont.truetype(fontPath, size=24)
         self.canvas = Image.new("RGB", (self.options.cols, self.options.rows))
         self.draw = ImageDraw.Draw(self.canvas)
