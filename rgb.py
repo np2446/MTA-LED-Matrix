@@ -15,7 +15,7 @@ class MatrixClass():
 
         # initialize fonts and canvas
         fontPath = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf" # replace with font path
-        self.font = ImageFont.truetype(fontPath)
+        self.font = ImageFont.truetype(fontPath, size=24)
         self.canvas = Image.new("RGB", (self.options.cols, self.options.rows))
         self.draw = ImageDraw.Draw(self.canvas)
 
@@ -23,7 +23,7 @@ class MatrixClass():
         self.matrix.Clear()
         text_width, text_height = self.draw.textsize(text, font=self.font)
         x = self.options.cols
-        y = 8
+        y = 4
 
         while x > -text_width:
             self.canvas = Image.new("RGB", (self.options.cols, self.options.rows))
