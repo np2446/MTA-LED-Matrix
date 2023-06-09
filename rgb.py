@@ -21,7 +21,7 @@ class MatrixClass():
 
     def displayText(self, text):
         self.matrix.Clear()
-        self.draw.text((0,0), text, font = self.font, fill = (255,255,0))
+        self.draw.text((0,8), text, font = self.font, fill = (255,255,0))
         self.matrix.SetImage(self.canvas.convert('RGB'))
 
     
