@@ -1,4 +1,4 @@
-# Subway Stop Info LED Matrix Display README
+# Subway Stop Info LED Matrix Display
 
 ## Project Description
 
