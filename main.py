@@ -10,13 +10,15 @@ def main():
 
     try:
      while True:
-        mta.collectData()
+        rgb.staticText("Refreshing")
+        try:
+           mta.collectData()
+        except:
+           rgb.displayText("Error fetching","data from mta")
+           continue
 
-        for _ in range(12):
-           rgb.displayText(mta.uptownString)
-           time.sleep(5)
-           rgb.displayText(mta.downtownString)
-           time.sleep(5)
+        for _ in range(16):
+           rgb.displayText(mta.uptownString, mta.downtownString)
 
     except KeyboardInterrupt:
         print("User interrupted program. Exiting...")

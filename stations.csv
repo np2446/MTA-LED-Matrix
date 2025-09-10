@@ -1,0 +1,63 @@
+GTFS Stop ID,Stop Name
+R01,Astoria-Ditmars Blvd
+R03,Astoria Blvd
+R04,30 Av
+R05,Broadway
+R06,36 Av
+R08,39 Av-Dutch Kills
+R11,Lexington Av/59 St
+R13,5 Av/59 St
+R14,57 St-7 Av
+R15,49 St
+R16,Times Sq-42 St
+R17,34 St-Herald Sq
+R18,28 St
+R19,23 St
+R20,14 St-Union Sq
+R21,8 St-NYU
+R22,Prince St
+R23,Canal St
+Q01,Canal St
+R24,City Hall
+R25,Cortlandt St
+R26,Rector St
+R27,Whitehall St-South Ferry
+R28,Court St
+R29,Jay St-MetroTech
+R30,DeKalb Av
+R31,Atlantic Av-Barclays Ctr
+R32,Union St
+R33,4 Av-9 St
+R34,Prospect Av
+R35,25 St
+R36,36 St
+R39,45 St
+R40,53 St
+R41,59 St
+R42,Bay Ridge Av
+R43,77 St
+R44,86 St
+R45,Bay Ridge-95 St
+D24,Atlantic Av-Barclays Ctr
+D25,7 Av
+D26,Prospect Park
+D27,Parkside Av
+D28,Church Av
+D29,Beverley Rd
+D30,Cortelyou Rd
+D31,Newkirk Plaza
+D32,Avenue H
+D33,Avenue J
+D34,Avenue M
+D35,Kings Hwy
+D37,Avenue U
+D38,Neck Rd
+D39,Sheepshead Bay
+D40,Brighton Beach
+D41,Ocean Pkwy
+D42,W 8 St-NY Aquarium
+D43,Coney Island-Stillwell Av
+127,Times Sq-42 St
+631,Grand Central-42 St
+635,14 St-Union Sq
+640,Brooklyn Bridge-City Hall

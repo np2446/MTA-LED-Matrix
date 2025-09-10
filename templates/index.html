@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-th"></i> LED Matrix Controller</h1>
+        <p>Control your RGB LED Matrix Display</p>
+    </div>
+    
+    <div class="status-bar">
+        <div class="status-indicator">
+            <span class="status-dot {% if current_app %}active{% else %}inactive{% endif %}"></span>
+            <span class="status-text">
+                {% if current_app %}Running: {{ current_app.upper() }}{% else %}Idle{% endif %}
+            </span>
+        </div>
+        
+        <div class="brightness-control">
+            <i class="fas fa-sun"></i>
+            <input type="range" class="brightness-slider" id="brightness" 
+                   min="10" max="100" value="75" onchange="updateBrightness(this.value)">
+            <span id="brightness-value">75%</span>
+        </div>
+    </div>
+    
+    <div class="app-grid">
+        <!-- Sports Card -->
+        <div class="app-card sports {% if current_app == 'sports' %}active{% endif %}">
+            <div class="app-header">
+                <div class="app-icon sports">
+                    <i class="fas fa-football-ball"></i>
+                </div>
+                <div class="app-title">
+                    <h2>Sports Scores</h2>
+                    <p>MLB, NFL and College Football</p>
+                </div>
+            </div>
+            
+            <div class="app-controls">
+                <div class="checkbox-group" style="margin-bottom:10px;">
+                    {% set sports = (current_settings.get('sports') if current_settings else {}) %}
+                    <label style="margin-right:12px;">
+                        <input type="checkbox" id="sport-mlb"
+                               {% if sports is not defined or sports is none or sports.get('mlb', True) %}checked{% endif %}>
+                        MLB
+                    </label>
+                    <label style="margin-right:12px;">
+                        <input type="checkbox" id="sport-nfl"
+                               {% if sports is not defined or sports is none or sports.get('nfl', True) %}checked{% endif %}>
+                        NFL
+                    </label>
+                    <label>
+                        <input type="checkbox" id="sport-cfb"
+                               {% if sports is not defined or sports is none or sports.get('cfb', True) %}checked{% endif %}>
+                        CFB
+                    </label>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="startSports(event)">
+                        <i class="fas fa-play"></i> Start
+                    </button>
+                    <button class="btn btn-danger" onclick="stopDisplay()">
+                        <i class="fas fa-stop"></i> Stop
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- News Card -->
+        <div class="app-card news {% if current_app == 'news' %}active{% endif %}">
+            <div class="app-header">
+                <div class="app-icon news">
+                    <i class="fas fa-newspaper"></i>
+                </div>
+                <div class="app-title">
+                    <h2>News Headlines</h2>
+                    <p>Breaking news from major sources</p>
+                </div>
+            </div>
+            
+            <div class="app-controls">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="breaking-only">
+                    <label for="breaking-only">Breaking News Only</label>
+                </div>
+                
+                <div class="form-group">
+                    <label for="news-category">Category Filter</label>
+                    <select class="form-control" id="news-category">
+                        <option value="">All Categories</option>
+                        <option value="business">Business</option>
+                        <option value="technology">Technology</option>
+                        <option value="politics">Politics</option>
+                        <option value="health">Health</option>
+                        <option value="science">Science</option>
+                        <option value="sports">Sports</option>
+                        <option value="entertainment">Entertainment</option>
+                    </select>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="startNews(event)">
+                        <i class="fas fa-play"></i> Start
+                    </button>
+                    <button class="btn btn-danger" onclick="stopDisplay()">
+                        <i class="fas fa-stop"></i> Stop
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- MTA Card -->
+        <div class="app-card mta {% if current_app == 'mta' %}active{% endif %}">
+            <div class="app-header">
+                <div class="app-icon mta">
+                    <i class="fas fa-subway"></i>
+                </div>
+                <div class="app-title">
+                    <h2>MTA Subway</h2>
+                    <p>Live NYC subway arrival times</p>
+                </div>
+            </div>
+            
+            <div class="app-controls">
+                <div class="form-group">
+                    <label for="station-select">Select Station</label>
+                    <select class="form-control" id="station-select">
+                        {% for station_id, station_name in stations.items() %}
+                        <option value="{{ station_id }}" 
+                                {% if station_id == '127' %}selected{% endif %}>
+                            {{ station_name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="startMTA(event)">
+                        <i class="fas fa-play"></i> Start
+                    </button>
+                    <button class="btn btn-danger" onclick="stopDisplay()">
+                        <i class="fas fa-stop"></i> Stop
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function startSports(e) {
+        const btn = e.target.closest('button');
+        btn.innerHTML = '<span class="loading-spinner"></span> Starting...';
+        btn.disabled = true;
+
+        const payload = {
+            sports: {
+                mlb: document.getElementById('sport-mlb').checked,
+                nfl: document.getElementById('sport-nfl').checked,
+                cfb: document.getElementById('sport-cfb').checked
+            }
+        };
+
+        fetch('/api/start/sports', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        })
+        .then(r => r.json())
+        .then(data => {
+            btn.innerHTML = '<i class="fas fa-play"></i> Start';
+            btn.disabled = false;
+            showToast(data.message);
+            updateStatus();
+        })
+        .catch(err => {
+            btn.innerHTML = '<i class="fas fa-play"></i> Start';
+            btn.disabled = false;
+            showToast('Error starting display');
+        });
+    }
+
+    function startNews(e) {
+        const btn = e.target.closest('button');
+        btn.innerHTML = '<span class="loading-spinner"></span> Starting...';
+        btn.disabled = true;
+
+        const breakingOnly = document.getElementById('breaking-only').checked;
+        const category = document.getElementById('news-category').value;
+
+        fetch('/api/start/news', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                breaking_only: breakingOnly,
+                category: category
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            btn.innerHTML = '<i class="fas fa-play"></i> Start';
+            btn.disabled = false;
+            showToast(data.message);
+            updateStatus();
+        })
+        .catch(error => {
+            btn.innerHTML = '<i class="fas fa-play"></i> Start';
+            btn.disabled = false;
+            showToast('Error starting news');
+        });
+    }
+    
+    function startMTA(e) {
+        const btn = e.target.closest('button');
+        btn.innerHTML = '<span class="loading-spinner"></span> Starting...';
+        btn.disabled = true;
+
+        const stationId = document.getElementById('station-select').value;
+        fetch('/api/start/mta', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({station_id: stationId})
+        })
+        .then(response => response.json())
+        .then(data => {
+            btn.innerHTML = '<i class="fas fa-play"></i> Start';
+            btn.disabled = false;
+            showToast(data.message);
+            updateStatus();
+        })
+        .catch(error => {
+            btn.innerHTML = '<i class="fas fa-play"></i> Start';
+            btn.disabled = false;
+            showToast('Error starting MTA');
+        });
+    }
+    
+    function stopDisplay() {
+        fetch('/api/stop', { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+            showToast(data.message);
+            updateStatus();
+        })
+        .catch(error => {
+            showToast('Error stopping display');
+        });
+    }
+    
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', function() {
+        updateStatus();
+    });
+</script>
+{% endblock %}
